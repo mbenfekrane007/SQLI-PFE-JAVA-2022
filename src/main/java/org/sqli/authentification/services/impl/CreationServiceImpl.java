@@ -25,6 +25,7 @@ public class CreationServiceImpl implements CreationService {
     public String validateSavingUser(User user) {
         if (groupRepository.findGroupByName(user.getGroup_id().getName()).isPresent() && userAuthentificationRepository.findByLogin(user.getLogin()).isEmpty()){
             userAuthentificationRepository.save(user);
+            return "Valid";
         }
         return "not Valid";
     }
