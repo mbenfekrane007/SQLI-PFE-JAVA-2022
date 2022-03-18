@@ -29,18 +29,19 @@ public class AuthentificationController {
         Optional<User> user = userAuthentificationRepository.findByLogin(authenticationRequest.getLogin());
 
         if(user.isPresent()){
-            if(user.get().isEnabled()){
-                if (user.get().getLogin().equals(authenticationRequest.getLogin()) && user.get().getPassword().equals(authenticationRequest.getPassword())){
+            if(user.get().isEnabled()) {
+                if (user.get().getLogin().equals(authenticationRequest.getLogin()) && user.get().getPassword().equals(authenticationRequest.getPassword())) {
                     responseEntity = ResponseEntity.ok(AuthenticationOK.builder()
                             .id(user.get().getId())
                             .login(user.get().getLogin())
                             .group(user.get().getGroup_id().getName()).build());
-                }else {
-                    responseEntity =  ResponseEntity.ok(AuthentificationError.builder().error("Authentication error").build());
+                }else if(user.get().getLoginattempts()==AuthentificationServiceImpl.MAX_FAILED_ATTEMPTS){
+                responseEntity = ResponseEntity.ok(AuthentificationError.builder().error("You have reached 3 failed authentication attempts, your account will be disabled").build());
+                authentificationService.lock(user.get());
+                }else{
+                    responseEntity = ResponseEntity.ok(AuthentificationError.builder().error("Authentication error").build());
                     authentificationService.increaseFailedAttempts(user.get());
                 }
-            }else if(user.get().getLoginattempts()==AuthentificationServiceImpl.MAX_FAILED_ATTEMPTS){
-                responseEntity = ResponseEntity.ok(AuthentificationError.builder().error("You have reached 3 failed authentication attempts, your account will be disabled").build());
             }else{
                 System.out.println(user.get().getLogin());
                 responseEntity = ResponseEntity.ok(AuthentificationError.builder().error("User disabled").build());
