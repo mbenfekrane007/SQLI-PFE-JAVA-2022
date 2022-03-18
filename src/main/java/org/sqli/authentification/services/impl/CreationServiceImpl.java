@@ -28,4 +28,13 @@ public class CreationServiceImpl implements CreationService {
         }
         return "not Valid";
     }
+
+    @Override
+    public String delete(String login) {
+        if(userAuthentificationRepository.findByLogin(login).isEmpty()){
+            return "Login (login in input) is not found";
+        }
+        userAuthentificationRepository.delete(userAuthentificationRepository.findByLogin(login).get());
+        return "Login (login in input) is deleted";
+    }
 }

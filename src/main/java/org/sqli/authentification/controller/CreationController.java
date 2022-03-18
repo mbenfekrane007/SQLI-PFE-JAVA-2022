@@ -2,10 +2,7 @@ package org.sqli.authentification.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.sqli.authentification.dao.GroupRepository;
 import org.sqli.authentification.dao.UserAuthentificationRepository;
 import org.sqli.authentification.dao.auth.AuthenticationOK;
@@ -61,5 +58,10 @@ public class CreationController {
                     .group(user.getGroup_id().getName()).build());
         }
 
+    }
+
+    @DeleteMapping("/user/{login}")
+    public ResponseEntity<?> deleteUser(@PathVariable("login") String login){
+        return ResponseEntity.ok(creationService.delete(login));
     }
 }
