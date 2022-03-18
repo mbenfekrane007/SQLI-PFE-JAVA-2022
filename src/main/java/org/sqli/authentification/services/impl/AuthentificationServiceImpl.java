@@ -1,10 +1,10 @@
-package org.sqli.authentification.service.impl;
+package org.sqli.authentification.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.sqli.authentification.dao.UserAuthentificationRepository;
 import org.sqli.authentification.entitie.User;
-import org.sqli.authentification.service.AuthentificationService;
+import org.sqli.authentification.services.AuthentificationService;
 
 import javax.transaction.Transactional;
 

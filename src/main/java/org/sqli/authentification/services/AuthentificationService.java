@@ -1,4 +1,4 @@
-package org.sqli.authentification.service;
+package org.sqli.authentification.services;
 
 import org.sqli.authentification.entitie.User;
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import org.sqli.authentification.entitie.User;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -15,6 +16,8 @@ public interface UserAuthentificationRepository extends JpaRepository<User,Long>
 
 
     Optional<User> findByLogin(String login);
+
+    List<User> findAll();
 
     @Query("UPDATE User u SET u.loginattempts = ?1 WHERE u.login = ?2")
     @Modifying

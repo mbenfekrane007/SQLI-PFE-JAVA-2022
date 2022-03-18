@@ -9,7 +9,7 @@ import org.sqli.authentification.dao.auth.AuthenticationRequest;
 import org.sqli.authentification.dao.auth.AuthenticationOK;
 import org.sqli.authentification.dao.auth.AuthentificationError;
 import org.sqli.authentification.entitie.User;
-import org.sqli.authentification.service.impl.AuthentificationServiceImpl;
+import org.sqli.authentification.services.impl.AuthentificationServiceImpl;
 
 import java.util.Optional;
 
@@ -21,6 +21,7 @@ public class AuthentificationController {
     UserAuthentificationRepository userAuthentificationRepository;
     @Autowired
     private AuthentificationServiceImpl authentificationService;
+
 
     private ResponseEntity<?> responseEntity;
 
@@ -43,8 +44,8 @@ public class AuthentificationController {
                     authentificationService.increaseFailedAttempts(user.get());
                 }
             }else{
-                System.out.println(user.get().getLogin());
                 responseEntity = ResponseEntity.ok(AuthentificationError.builder().error("User disabled").build());
+                authentificationService.increaseFailedAttempts(user.get());
 
             }
 
@@ -54,6 +55,8 @@ public class AuthentificationController {
         return responseEntity;
 
     }
+
+
 }
 /* return (!user.get().isEnabled())?ResponseEntity.ok(AuthentificationError.builder().error("User disabled").build()):(user.isPresent() && password.isPresent())?ResponseEntity.ok(AuthenticationOK.builder().id(user.get().getId()).login(user.get().getLogin()).group(user.get().getGroup_id().getName()).build())
         :ResponseEntity.ok(AuthentificationError.builder().error("Authentication error").build());*/
