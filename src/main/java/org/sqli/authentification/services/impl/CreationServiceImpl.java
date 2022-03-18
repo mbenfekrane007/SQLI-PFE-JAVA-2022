@@ -15,15 +15,16 @@ import javax.transaction.Transactional;
 public class CreationServiceImpl implements CreationService {
 
 
-    @Autowired
-    GroupRepository groupRepository;
+
     @Autowired
     UserAuthentificationRepository userAuthentificationRepository;
 
 
     @Override
     public String validateSavingUser(User user) {
-        if (groupRepository.findGroupByName(user.getGroup_id().getName()).isPresent() && userAuthentificationRepository.findByLogin(user.getLogin()).isEmpty()){
+        if (userAuthentificationRepository.findByLogin(user.getLogin()).isEmpty()){
+            System.out.println("heeere");
+            System.out.println(userAuthentificationRepository.findByLogin(user.getLogin()).isEmpty());
             userAuthentificationRepository.save(user);
             return "Valid";
         }
