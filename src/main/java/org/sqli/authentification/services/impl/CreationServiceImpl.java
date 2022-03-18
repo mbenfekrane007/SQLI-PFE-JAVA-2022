@@ -23,8 +23,6 @@ public class CreationServiceImpl implements CreationService {
     @Override
     public String validateSavingUser(User user) {
         if (userAuthentificationRepository.findByLogin(user.getLogin()).isEmpty()){
-            System.out.println("heeere");
-            System.out.println(userAuthentificationRepository.findByLogin(user.getLogin()).isEmpty());
             userAuthentificationRepository.save(user);
             return "Valid";
         }
