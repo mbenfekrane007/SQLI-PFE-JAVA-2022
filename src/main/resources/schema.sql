@@ -3,7 +3,7 @@ CREATE TABLE user (
   login             VARCHAR(64) NOT NULL,
   password          VARCHAR(64) NOT NULL,
   enabled           INTEGER DEFAULT 1 NOT NULL,
-  loginAttempts     INTEGER DEFAULT 0 NOT NULL,
+  loginattempts     INTEGER DEFAULT 0 NOT NULL,
   group_id          INTEGER not null
   );
 
