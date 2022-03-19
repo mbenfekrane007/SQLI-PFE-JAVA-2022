@@ -2,12 +2,13 @@ package org.sqli.authentification.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.sqli.authentification.dao.UserAuthentificationRepository;
 import org.sqli.authentification.dao.auth.AuthenticationRequest;
 import org.sqli.authentification.dao.auth.AuthenticationOK;
-import org.sqli.authentification.dao.auth.AuthentificationError;
+import org.sqli.authentification.dao.auth.CustomError;
 import org.sqli.authentification.entitie.User;
 import org.sqli.authentification.services.impl.AuthentificationServiceImpl;
 
@@ -37,20 +38,20 @@ public class AuthentificationController {
                             .login(user.get().getLogin())
                             .group(user.get().getGroup_id().getName()).build());
                 }else if(user.get().getLoginattempts()==AuthentificationServiceImpl.MAX_FAILED_ATTEMPTS){
-                responseEntity = ResponseEntity.ok(AuthentificationError.builder().error("You have reached 3 failed authentication attempts, your account will be disabled").build());
+                responseEntity = ResponseEntity.status(HttpStatus.LOCKED).body(CustomError.builder().error("You have reached 3 failed authentication attempts, your account will be disabled").build());
                 authentificationService.lock(user.get());
                 }else{
-                    responseEntity = ResponseEntity.ok(AuthentificationError.builder().error("Authentication error").build());
+                    responseEntity = ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(CustomError.builder().error("Authentication error").build());
                     authentificationService.increaseFailedAttempts(user.get());
                 }
             }else{
-                responseEntity = ResponseEntity.ok(AuthentificationError.builder().error("User disabled").build());
+                responseEntity = ResponseEntity.status(HttpStatus.FORBIDDEN).body(CustomError.builder().error("User disabled").build());
                 authentificationService.increaseFailedAttempts(user.get());
 
             }
 
         }else {
-            responseEntity = ResponseEntity.ok(AuthentificationError.builder().error("Users not Found !").build());
+            responseEntity = ResponseEntity.status(HttpStatus.NOT_FOUND).body(CustomError.builder().error("Users not Found !").build());
         }
         return responseEntity;
 

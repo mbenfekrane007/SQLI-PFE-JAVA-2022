@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Builder
 @Data
-public class AuthentificationError {
+public class CustomError {
     private String error;
 }
