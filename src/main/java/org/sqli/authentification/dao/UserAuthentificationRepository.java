@@ -16,6 +16,7 @@ public interface UserAuthentificationRepository extends JpaRepository<User,Long>
 
 
     Optional<User> findByLogin(String login);
+    Optional<User> findByLoginAndPassword(String login, String password);
 
     List<User> findAll();
 

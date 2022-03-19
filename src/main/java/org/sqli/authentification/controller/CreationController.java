@@ -8,6 +8,7 @@ import org.sqli.authentification.dao.GroupRepository;
 import org.sqli.authentification.dao.UserAuthentificationRepository;
 import org.sqli.authentification.dao.auth.AuthenticationOK;
 import org.sqli.authentification.controller.responses.CustomError;
+import org.sqli.authentification.dao.auth.AuthenticationRequest;
 import org.sqli.authentification.dao.create.UserDto;
 import org.sqli.authentification.dao.create.UserRequest;
 import org.sqli.authentification.entitie.Group;
@@ -15,6 +16,7 @@ import org.sqli.authentification.entitie.User;
 import org.sqli.authentification.controller.responses.MessageSuccess;
 import org.sqli.authentification.services.impl.CreationServiceImpl;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -34,8 +36,6 @@ public class CreationController {
 
     @PostMapping("/user")
     public ResponseEntity<?> saveUser(@RequestBody UserRequest userInput){
-        //List<User> users = userAuthentificationRepository.findAll();
-        //Integer id = users.size()+1;
         Optional<Group> group = groupRepository.findGroupByName(userInput.getGroup());
         if(group.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(CustomError.builder().error("Group ".concat(userInput.getGroup()).concat(" is not valid")).build());
@@ -63,11 +63,18 @@ public class CreationController {
     }
 
     @DeleteMapping("/user/{login}")
-    public ResponseEntity<?> deleteUser(@PathVariable("login") String login){
+    public ResponseEntity<?> deleteUser(@PathVariable("login") String login, @RequestHeader Map<String,String> userAuth){
 
-        if(userAuthentificationRepository.findByLogin(login).isEmpty()){
+        Optional<User> user = userAuthentificationRepository.findByLoginAndPassword(userAuth.get("login"),userAuth.get("password"));
+        if (user.isPresent()){
+            if(user.get().getGroup_id().getName().equals("admin")){
+                return ResponseEntity.ok(MessageSuccess.builder().success(creationService.delete(login)).build());
+            }else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(CustomError.builder().error("You are not authorized to delete "+login).build());
+            }
+        }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CustomError.builder().error("Login "+ login + " is not found").build());
         }
-        return ResponseEntity.ok(MessageSuccess.builder().success(creationService.delete(login)).build());
+
     }
 }
