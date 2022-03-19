@@ -68,9 +68,12 @@ public class CreationController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(CustomError.builder().error("please provide user information for deleting").build());
         }
         Optional<User> user = userAuthentificationRepository.findByLoginAndPassword(userAuth.get("login"),userAuth.get("password"));
+
         if (user.isPresent()){
             if(user.get().getGroup_id().getName().equals("admin")){
-                return ResponseEntity.ok(MessageSuccess.builder().success(creationService.delete(login)).build());
+                String deleteUser = creationService.delete(login);
+                return (!deleteUser.equals("Error"))?ResponseEntity.ok(MessageSuccess.builder().success(deleteUser).build()):
+                        ResponseEntity.status(HttpStatus.BAD_REQUEST).body(CustomError.builder().error("Admin can't delete him self").build());
             }else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(CustomError.builder().error("You are not authorized to delete "+login).build());
             }

@@ -38,7 +38,11 @@ public class CreationServiceImpl implements CreationService {
 
     @Override
     public String delete(String login) {
-        userAuthentificationRepository.delete(userAuthentificationRepository.findByLogin(login).get());
+        User user = userAuthentificationRepository.findByLogin(login).get();
+        if (user.getGroup_id().getName().equals("admin")){
+            return "Error";
+        }
+        userAuthentificationRepository.delete(user);
         return "Login " +login+" is deleted";
     }
 }
