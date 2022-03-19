@@ -64,7 +64,9 @@ public class CreationController {
 
     @DeleteMapping("/user/{login}")
     public ResponseEntity<?> deleteUser(@PathVariable("login") String login, @RequestHeader Map<String,String> userAuth){
-
+        if (userAuth.get("login").isEmpty() || userAuth.get("password").isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(CustomError.builder().error("please provide user information for deleting").build());
+        }
         Optional<User> user = userAuthentificationRepository.findByLoginAndPassword(userAuth.get("login"),userAuth.get("password"));
         if (user.isPresent()){
             if(user.get().getGroup_id().getName().equals("admin")){
