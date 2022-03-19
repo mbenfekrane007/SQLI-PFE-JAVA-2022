@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Setter
 public class AbstractEntity implements Serializable {
 
-    
+
 
     @Id
     @SequenceGenerator(name = "pet_seq",

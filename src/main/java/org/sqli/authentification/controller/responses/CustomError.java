@@ -1,4 +1,4 @@
-package org.sqli.authentification.dao.auth;
+package org.sqli.authentification.controller.responses;
 
 import lombok.Builder;
 import lombok.Data;

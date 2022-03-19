@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.sqli.authentification.dao.UserAuthentificationRepository;
 import org.sqli.authentification.dao.auth.AuthenticationRequest;
 import org.sqli.authentification.dao.auth.AuthenticationOK;
-import org.sqli.authentification.dao.auth.CustomError;
+import org.sqli.authentification.controller.responses.CustomError;
 import org.sqli.authentification.entitie.User;
 import org.sqli.authentification.services.impl.AuthentificationServiceImpl;
 

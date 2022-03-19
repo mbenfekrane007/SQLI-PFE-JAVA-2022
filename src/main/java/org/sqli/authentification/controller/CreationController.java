@@ -7,14 +7,14 @@ import org.springframework.web.bind.annotation.*;
 import org.sqli.authentification.dao.GroupRepository;
 import org.sqli.authentification.dao.UserAuthentificationRepository;
 import org.sqli.authentification.dao.auth.AuthenticationOK;
-import org.sqli.authentification.dao.auth.CustomError;
+import org.sqli.authentification.controller.responses.CustomError;
 import org.sqli.authentification.dao.create.UserDto;
 import org.sqli.authentification.dao.create.UserRequest;
 import org.sqli.authentification.entitie.Group;
 import org.sqli.authentification.entitie.User;
+import org.sqli.authentification.controller.responses.MessageSuccess;
 import org.sqli.authentification.services.impl.CreationServiceImpl;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -68,6 +68,6 @@ public class CreationController {
         if(userAuthentificationRepository.findByLogin(login).isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CustomError.builder().error("Login "+ login + " is not found").build());
         }
-        return ResponseEntity.ok(creationService.delete(login));
+        return ResponseEntity.ok(MessageSuccess.builder().success(creationService.delete(login)).build());
     }
 }
