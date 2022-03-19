@@ -34,22 +34,26 @@ public class CreationController {
 
     @PostMapping("/user")
     public ResponseEntity<?> saveUser(@RequestBody UserRequest userInput){
-        List<User> users = userAuthentificationRepository.findAll();
-        Integer id = users.size()+1;
+        //List<User> users = userAuthentificationRepository.findAll();
+        //Integer id = users.size()+1;
         Optional<Group> group = groupRepository.findGroupByName(userInput.getGroup());
         if(group.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(CustomError.builder().error("Group (group in input) is not valid").build());
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(CustomError.builder().error("Group ".concat(userInput.getGroup()).concat(" is not valid")).build());
         }
-        UserDto userDto = UserDto.builder().id(id)
+        if(!userInput.getPassword().equals(userInput.getPasswordConfirmation())){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(CustomError.builder().error("passwords don't match!").build());
+        }
+        UserDto userDto = UserDto.builder()
                         .login(userInput.getLogin())
                 .password(userInput.getPassword())
                                 .enabled(true)
                                         .loginattempts(0)
                                                 .group(group.get()).build();
         User user =  userDto.toEntity(userDto);
+        String validUserSave = creationService.validateSavingUser(user);
 
-        if(creationService.validateSavingUser(user).equals("not Valid")){
-            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(CustomError.builder().error("Login (login in input) is not valid").build());
+        if(validUserSave.equals("not Valid") || validUserSave.equals("Login is not match")){
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body(CustomError.builder().error("Login ".concat(userInput.getLogin().concat(" is not valid"))).build());
         }else{
             return ResponseEntity.ok(AuthenticationOK.builder().id(user.getId())
                     .login(user.getLogin())
@@ -62,7 +66,7 @@ public class CreationController {
     public ResponseEntity<?> deleteUser(@PathVariable("login") String login){
 
         if(userAuthentificationRepository.findByLogin(login).isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CustomError.builder().error("Login (login in input) is not found").build());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(CustomError.builder().error("Login "+ login + " is not found").build());
         }
         return ResponseEntity.ok(creationService.delete(login));
     }

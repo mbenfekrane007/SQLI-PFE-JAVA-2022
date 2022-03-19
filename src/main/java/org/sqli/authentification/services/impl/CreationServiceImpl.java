@@ -8,6 +8,8 @@ import org.sqli.authentification.entitie.User;
 import org.sqli.authentification.services.CreationService;
 
 import javax.transaction.Transactional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Service
@@ -22,9 +24,14 @@ public class CreationServiceImpl implements CreationService {
 
     @Override
     public String validateSavingUser(User user) {
+        Pattern pattern = Pattern.compile("^[a-z][a-zA-Z_0-9]{3,7}$");
+        Matcher matcher = pattern.matcher(user.getLogin());
         if (userAuthentificationRepository.findByLogin(user.getLogin()).isEmpty()){
-            userAuthentificationRepository.save(user);
-            return "Valid";
+            if (matcher.find()){
+                userAuthentificationRepository.save(user);
+                return "Valid";
+            }
+            return "Login is not match";
         }
         return "not Valid";
     }

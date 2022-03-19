@@ -10,5 +10,6 @@ import lombok.Data;
 public class UserRequest {
     private String login;
     private String password;
+    private String passwordConfirmation;
     private String group;
 }
