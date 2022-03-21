@@ -10,7 +10,7 @@ import org.sqli.authentification.dao.auth.AuthenticationRequest;
 import org.sqli.authentification.dao.auth.AuthenticationOK;
 import org.sqli.authentification.controller.responses.CustomError;
 import org.sqli.authentification.entitie.User;
-import org.sqli.authentification.services.impl.AuthentificationServiceImpl;
+import org.sqli.authentification.services.AuthentificationService;
 
 import java.util.Optional;
 
@@ -20,8 +20,10 @@ public class AuthentificationController {
 
     @Autowired
     UserAuthentificationRepository userAuthentificationRepository;
+	
+	
     @Autowired
-    private AuthentificationServiceImpl authentificationService;
+    private AuthentificationService authentificationService;
 
 
     private ResponseEntity<?> responseEntity;

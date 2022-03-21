@@ -14,7 +14,7 @@ import org.sqli.authentification.dao.create.UserRequest;
 import org.sqli.authentification.entitie.Group;
 import org.sqli.authentification.entitie.User;
 import org.sqli.authentification.controller.responses.MessageSuccess;
-import org.sqli.authentification.services.impl.CreationServiceImpl;
+import org.sqli.authentification.services.CreationService;
 
 import java.util.Map;
 import java.util.Optional;
@@ -24,7 +24,7 @@ import java.util.Optional;
 public class CreationController {
 
     @Autowired
-    CreationServiceImpl creationService;
+    CreationService creationService;
 
     @Autowired
     UserAuthentificationRepository userAuthentificationRepository;
