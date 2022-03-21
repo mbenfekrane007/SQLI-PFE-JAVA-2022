@@ -39,7 +39,7 @@ public class AuthentificationController {
                             .id(user.get().getId())
                             .login(user.get().getLogin())
                             .group(user.get().getGroup_id().getName()).build());
-                }else if(user.get().getLoginattempts()==AuthentificationServiceImpl.MAX_FAILED_ATTEMPTS){
+                }else if(user.get().getLoginattempts()==authentificationService.MAX_FAILED_ATTEMPTS){
                 responseEntity = ResponseEntity.status(HttpStatus.LOCKED).body(CustomError.builder().error("You have reached 3 failed authentication attempts, your account will be disabled").build());
                 authentificationService.lock(user.get());
                 }else{

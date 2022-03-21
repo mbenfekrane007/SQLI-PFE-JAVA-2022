@@ -15,7 +15,7 @@ public class AuthentificationServiceImpl implements AuthentificationService {
     @Autowired
     UserAuthentificationRepository userAuthentificationRepository;
 
-    public static final int MAX_FAILED_ATTEMPTS = 3;
+    ;
 
     @Override
     public void increaseFailedAttempts(User user) {
